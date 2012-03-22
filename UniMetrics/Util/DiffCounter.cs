@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (C) 2011-2012 Kazunori Sakamoto
+// Copyright (C) 2011-2012 The Unicoen Project
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,21 +17,21 @@
 #endregion
 
 namespace Unicoen.Apps.Loc.Util {
-    // class containing number of differential elements
-    public class DiffCounter {
-        public DiffCounter(int na, int nd, int nm, int ne) {
-            AddedCount = na;
-            DeletedCount = nd;
-            ModifiedCount = nm;
-            EqualCount = ne;
-        }
+	// class containing number of differential elements
+	public class DiffCounter {
+		public DiffCounter(int na, int nd, int nm, int ne) {
+			AddedCount = na;
+			DeletedCount = nd;
+			ModifiedCount = nm;
+			EqualCount = ne;
+		}
 
-        public DiffCounter()
-                : this(0, 0, 0, 0) {}
+		public DiffCounter()
+				: this(0, 0, 0, 0) {}
 
-        public int AddedCount { get; set; }
-        public int DeletedCount { get; set; }
-        public int ModifiedCount { get; set; }
-        public int EqualCount { get; set; }
-    }
+		public int AddedCount { get; set; }
+		public int DeletedCount { get; set; }
+		public int ModifiedCount { get; set; }
+		public int EqualCount { get; set; }
+	}
 }
