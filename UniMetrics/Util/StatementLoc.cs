@@ -29,12 +29,14 @@ using Unicoen.Model;
 
 namespace Unicoen.Apps.Loc.Util {
 	public class StatementLoc {
-		// measure number of statements as the logical lines of code
+		/// <summary>
+		/// measure number of statements as the logical lines of code
+		/// </summary>
 		public static int Count(string inputPath) {
-			FileAttributes attr = File.GetAttributes(@inputPath);
+			var attr = File.GetAttributes(@inputPath);
 			// if inputPath is a directory
 			if ((attr & FileAttributes.Directory) == FileAttributes.Directory) {
-				DirectoryInfo dirPath = new DirectoryInfo(@inputPath);
+				var dirPath = new DirectoryInfo(@inputPath);
 				return CountForDirectory(dirPath);
 			}
 					// if inputPath is a file
@@ -43,12 +45,14 @@ namespace Unicoen.Apps.Loc.Util {
 			}
 		}
 
-		// count  sum of statements of all files in directory
+		/// <summary>
+		/// count  sum of statements of all files in directory
+		/// </summary>
 		private static int CountForDirectory(DirectoryInfo dirPath) {
 			var sum = 0;
 			var files = dirPath.GetFiles("*.*");
 			foreach (FileInfo file in files) {
-				String fi = file.FullName;
+				var fi = file.FullName;
 				var fiLoc = CountForFile(fi);
 				sum += fiLoc;
 				Console.WriteLine(fi + " | stmt=" + fiLoc);
@@ -60,46 +64,32 @@ namespace Unicoen.Apps.Loc.Util {
 			return sum;
 		}
 
-		// count number of statements of a file
+		/// <summary>
+		/// count number of statements of a file
+		/// </summary>
 		private static int CountForFile(string filePath) {
 			var ext = Path.GetExtension(filePath);
 			switch (ext.ToLower()) {
 			case ".c":
-				return
-						StatementNumber(
-								new CProgramGenerator().GenerateFromFile(
-										filePath));
+				return StatementNumber(new CProgramGenerator().GenerateFromFile(filePath));
 			case ".cs":
-				return
-						StatementNumber(
-								new CSharpProgramGenerator().GenerateFromFile(
-										filePath));
+				return StatementNumber(new CSharpProgramGenerator().GenerateFromFile(filePath));
 			case ".java":
-				return
-						StatementNumber(
-								new JavaProgramGenerator().GenerateFromFile(
-										filePath));
+				return StatementNumber(new JavaProgramGenerator().GenerateFromFile(filePath));
 			case ".js":
-				return
-						StatementNumber(
-								new JavaScriptProgramGenerator().
-										GenerateFromFile(filePath));
+				return StatementNumber(new JavaScriptProgramGenerator().GenerateFromFile(filePath));
 			case ".py":
-				return
-						StatementNumber(
-								new Python2ProgramGenerator().GenerateFromFile(
-										filePath));
+				return StatementNumber(new Python2ProgramGenerator().GenerateFromFile(filePath));
 			case ".rb":
-				return
-						StatementNumber(
-								new Ruby18ProgramGenerator().GenerateFromFile(
-										filePath));
+				return StatementNumber(new Ruby18ProgramGenerator().GenerateFromFile(filePath));
 			default:
 				return 0;
 			}
 		}
 
-		// count statements of a unified code object
+		/// <summary>
+		/// count statements of a unified code object
+		/// </summary>
 		private static int StatementNumber(UnifiedProgram codeObject) {
 			var blocks = codeObject.Descendants<UnifiedBlock>();
 			var sum = 0;
