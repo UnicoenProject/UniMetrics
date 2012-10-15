@@ -21,26 +21,30 @@ using System.IO;
 
 namespace Unicoen.Apps.Loc.Util {
 	public class TotalLoc {
-		// measure number of physical lines of target source code
+		/// <summary>
+		/// measure number of physical lines of target source code
+		/// </summary>
 		public static int Count(string inputPath) {
-			FileAttributes attr = File.GetAttributes(@inputPath);
+			var attr = File.GetAttributes(@inputPath);
 			// if inputPath is a directory
 			if ((attr & FileAttributes.Directory) == FileAttributes.Directory) {
-				DirectoryInfo dirPath = new DirectoryInfo(@inputPath);
+				var dirPath = new DirectoryInfo(@inputPath);
 				return CountForDirectory(dirPath);
 			}
-					// if inputPath is a file
+			// if inputPath is a file
 			else {
 				return CountForFile(inputPath);
 			}
 		}
 
-		// count  sum of total LOC of all files in directory
+		/// <summary>
+		/// count  sum of total LOC of all files in directory
+		/// </summary>
 		private static int CountForDirectory(DirectoryInfo dirPath) {
 			var sum = 0;
 			var files = dirPath.GetFiles("*.*");
 			foreach (FileInfo file in files) {
-				String fi = file.FullName;
+				var fi = file.FullName;
 				var fiLoc = CountForFile(fi);
 				sum += fiLoc;
 				Console.WriteLine(fi + " | tloc=" + fiLoc);
@@ -52,9 +56,11 @@ namespace Unicoen.Apps.Loc.Util {
 			return sum;
 		}
 
-		// count total LOC of a file
+		/// <summary>
+		/// count total LOC of a file
+		/// </summary>
 		private static int CountForFile(string filePath) {
-			int count = 0;
+			var count = 0;
 			var sr = new StreamReader(filePath);
 			while (sr.ReadLine() != null) {
 				count++;

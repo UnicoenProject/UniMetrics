@@ -18,7 +18,6 @@
 
 using NUnit.Framework;
 using Unicoen.Apps.Loc.Util;
-using Unicoen.TestUtils;
 
 namespace Unicoen.Apps.Loc.Tests {
 	[TestFixture]

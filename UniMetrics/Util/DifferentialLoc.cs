@@ -23,11 +23,13 @@ using DiffPlex.DiffBuilder.Model;
 
 namespace Unicoen.Apps.Loc.Util {
 	public class DifferentialLoc {
-		// measure differential between two files
+		/// <summary>
+		/// measure differential between two files
+		/// </summary>
 		public static DiffCounter Count(
 				string originalFile, string modifiedFile) {
-			string original = File.ReadAllText(@originalFile);
-			string modified = File.ReadAllText(@modifiedFile);
+			var original = File.ReadAllText(@originalFile);
+			var modified = File.ReadAllText(@modifiedFile);
 
 			var d = new Differ();
 			var counter = new DiffCounter();

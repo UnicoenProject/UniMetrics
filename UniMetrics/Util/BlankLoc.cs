@@ -21,13 +21,16 @@ using System.IO;
 
 namespace Unicoen.Apps.Loc.Util {
 	public class BlankLoc {
-		// measure number of the lines which contain only space character(s) 
-		// (the blank character, tab character and newline character) 
+		
+		/// <summary>
+		/// measure number of the lines which contain only space character(s)
+		/// (the blank character, tab character and newline character) 
+		/// </summary>
 		public static int Count(string inputPath) {
-			FileAttributes attr = File.GetAttributes(@inputPath);
+			var attr = File.GetAttributes(@inputPath);
 			// if inputPath is a directory
 			if ((attr & FileAttributes.Directory) == FileAttributes.Directory) {
-				DirectoryInfo dirPath = new DirectoryInfo(@inputPath);
+				var dirPath = new DirectoryInfo(@inputPath);
 				return CountForDirectory(dirPath);
 			}
 					// if inputPath is a file
@@ -36,12 +39,14 @@ namespace Unicoen.Apps.Loc.Util {
 			}
 		}
 
-		// count  sum of blank LOC of all files in directory
+		/// <summary>
+		/// count sum of blank LOC of all files in directory
+		/// </summary>
 		private static int CountForDirectory(DirectoryInfo dirPath) {
 			var sum = 0;
 			var files = dirPath.GetFiles("*.*");
-			foreach (FileInfo file in files) {
-				String fi = file.FullName;
+			foreach (var file in files) {
+				var fi = file.FullName;
 				var fiLoc = CountForFile(fi);
 				sum += fiLoc;
 				Console.WriteLine(fi + " | bloc=" + fiLoc);
@@ -53,7 +58,10 @@ namespace Unicoen.Apps.Loc.Util {
 			return sum;
 		}
 
-		// count blank LOC of a file
+		
+		/// <summary>
+		/// count blank LOC of a file
+		/// </summary>
 		private static int CountForFile(string filePath) {
 			string line;
 			int count = 0;
