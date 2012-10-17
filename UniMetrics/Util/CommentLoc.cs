@@ -46,7 +46,7 @@ namespace Unicoen.Apps.Loc.Util
 				var fi = file.FullName;
 				var fiLoc = CountForFile(fi);
 				sum += fiLoc;
-				Console.WriteLine(fi + " | stmt=" + fiLoc);
+				Console.WriteLine(fi + " | comment=" + fiLoc);
 			}
 			var dirs = dirPath.GetDirectories("*.*");
 			foreach (DirectoryInfo dir in dirs)

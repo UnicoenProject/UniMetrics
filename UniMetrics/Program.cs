@@ -34,6 +34,7 @@ namespace Unicoen.Apps.Loc {
 				Console.WriteLine("Input    : " + inputPath + "\n");
 				//PrintBasicInfo(inputPath);
 				Console.WriteLine("Comment LOC      : " + CommentLoc.Count(inputPath));
+				Console.WriteLine("Cyclomatic Complexity      : " + CyclomaticComplexity.Count(inputPath));
 			}
 
 			// DIFFERENTIAL MEASUREMENT
