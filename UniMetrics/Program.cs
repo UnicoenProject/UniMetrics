@@ -32,9 +32,10 @@ namespace Unicoen.Apps.Loc {
 				var inputPath = FixtureUtil.GetInputPath(args[0], args[1]);
 				Console.WriteLine("Language : " + args[0]);
 				Console.WriteLine("Input    : " + inputPath + "\n");
-				//PrintBasicInfo(inputPath);
-				Console.WriteLine("Comment LOC      : " + CommentLoc.Count(inputPath));
-				Console.WriteLine("Cyclomatic Complexity      : " + CyclomaticComplexity.Count(inputPath));
+				PrintBasicInfo(inputPath);
+				Console.WriteLine("Comment LOC           : " + CommentLoc.Count(inputPath));
+				Console.WriteLine("Cyclomatic Complexity : " + CyclomaticComplexity.Count(inputPath));
+                Console.WriteLine("Weighted Method       : " + WeightedMethod.Count(inputPath));
 			}
 
 			// DIFFERENTIAL MEASUREMENT

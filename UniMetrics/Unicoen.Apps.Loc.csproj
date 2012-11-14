@@ -169,6 +169,7 @@
     <Compile Include="Util\DifferentialLoc.cs" />
     <Compile Include="Util\StatementLoc.cs" />
     <Compile Include="Util\TotalLoc.cs" />
+    <Compile Include="Util\WeightedMethod.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
