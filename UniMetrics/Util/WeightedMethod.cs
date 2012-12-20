@@ -80,7 +80,7 @@ namespace Unicoen.Apps.Loc.Util
             var func = codeObject.Descendants<UnifiedFunctionDefinition>();
             foreach (var f in func)
             {
-                //Console.WriteLine(f.Elements().OfType<UnifiedVariableIdentifier>().ElementAt(0).Name);
+                Console.WriteLine(f.Elements().OfType<UnifiedVariableIdentifier>().ElementAt(0).Name);
             }
             //Console.WriteLine(codeObject.ToString());
             return func.Count() + codeObject.Descendants<UnifiedConstructor>().Count();

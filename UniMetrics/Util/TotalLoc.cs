@@ -60,11 +60,21 @@ namespace Unicoen.Apps.Loc.Util {
 		/// count total LOC of a file
 		/// </summary>
 		private static int CountForFile(string filePath) {
-			var count = 0;
+			/*var count = 0;
 			var sr = new StreamReader(filePath);
 			while (sr.ReadLine() != null) {
 				count++;
-			}
+			}*/
+
+            string line;
+            int count = 0;
+            var sr = new StreamReader(filePath);
+            while ((line = sr.ReadLine()) != null)
+            {
+                count++;
+            }
+            
+
 			sr.Close();
 
 			var srb = new StreamReader(filePath);

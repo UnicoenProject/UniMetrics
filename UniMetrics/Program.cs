@@ -19,6 +19,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
+using Unicoen.Apps.Loc.UcoAnalyzer;
 using Unicoen.Apps.Loc.Util;
 
 namespace Unicoen.Apps.Loc {
@@ -32,10 +34,20 @@ namespace Unicoen.Apps.Loc {
 				var inputPath = FixtureUtil.GetInputPath(args[0], args[1]);
 				Console.WriteLine("Language : " + args[0]);
 				Console.WriteLine("Input    : " + inputPath + "\n");
-				PrintBasicInfo(inputPath);
-				Console.WriteLine("Comment LOC           : " + CommentLoc.Count(inputPath));
-				Console.WriteLine("Cyclomatic Complexity : " + CyclomaticComplexity.Count(inputPath));
-                Console.WriteLine("Weighted Method       : " + WeightedMethod.Count(inputPath));
+
+				var size = new SizeMeasurement(inputPath);
+				size.SetSizeMeasurement();
+				//size.PrintSizeMeasurement();
+
+				var comp = new ComplexityMeasurement(inputPath);
+				comp.SetComplexityMeasurement();
+				//comp.PrintComplexityMeasurement();
+
+				var meas = new MeasurableElement(inputPath);
+				meas.SetMeasurableElement();
+
+				var xml = new MeasurementXmlGenerator();
+				xml.GenerateXmlElement(inputPath);
 			}
 
 			// DIFFERENTIAL MEASUREMENT
@@ -48,22 +60,9 @@ namespace Unicoen.Apps.Loc {
 				var modif = FixtureUtil.GetInputPath(args[0], args[2]);
 				Console.WriteLine("Language      : " + args[0] + "\n");
 				Console.WriteLine("File 1 : " + orign);
-				PrintBasicInfo(orign);
 				Console.WriteLine("File 2 : " + modif);
-				PrintBasicInfo(modif);
 				PrintDifferentialInfo(orign, modif);
 			}
-		}
-
-		private static void PrintBasicInfo(string inputPath) {
-			Console.WriteLine(
-					"Total Lines of Code      : " + TotalLoc.Count(inputPath));
-			Console.WriteLine(
-					"Blank Lines of Code      : " + BlankLoc.Count(inputPath));
-			Console.WriteLine(
-					"Statements Count of Code : "
-					+ StatementLoc.Count(inputPath));
-			Console.WriteLine();
 		}
 
 		private static void PrintDifferentialInfo(string orign, string modif) {

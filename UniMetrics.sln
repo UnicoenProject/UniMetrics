@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unicoen.Apps.Loc", "UniMetrics\Unicoen.Apps.Loc.csproj", "{A1839E51-87A4-40BA-9000-172A6485ADC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unicoen.Apps.UniMetrics", "UniMetrics\Unicoen.Apps.UniMetrics.csproj", "{A1839E51-87A4-40BA-9000-172A6485ADC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unicoen.Apps.Loc.Tests", "UniMetrics.Tests\Unicoen.Apps.Loc.Tests.csproj", "{FA501847-D522-4015-B286-F73E5E35B836}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unicoen.Apps.UniMetrics.Tests", "UniMetrics.Tests\Unicoen.Apps.UniMetrics.Tests.csproj", "{FA501847-D522-4015-B286-F73E5E35B836}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
