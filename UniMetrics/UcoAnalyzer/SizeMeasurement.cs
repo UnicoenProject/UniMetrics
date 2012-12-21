@@ -108,7 +108,8 @@ namespace Unicoen.Apps.Loc.UcoAnalyzer
                     break;
             }
 
-            if (codeObject.Comments != null)
+            //if (codeObject.Comments != null)
+            try
             {
                 var comment = 0;
                 foreach (var c in codeObject.Comments)
@@ -124,7 +125,8 @@ namespace Unicoen.Apps.Loc.UcoAnalyzer
                 }
                 this.CommentLoc = comment;
             }
-            else
+            //else
+            catch (Exception e)
             {
                 this.CommentLoc = 0;
             }

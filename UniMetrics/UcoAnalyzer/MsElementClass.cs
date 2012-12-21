@@ -5,12 +5,12 @@ using System.Text;
 
 namespace Unicoen.Apps.Loc.UcoAnalyzer
 {
-    class ElementClass 
+    class MsElementClass 
     {
         public string Name { get; set; }
         public string Type { get; set; }
-        public List<ElementMethod> ListMethod { get; set; }
-        public List<ElementAttribute> ListAttribute { get; set; }
+        public List<MsElementMethod> ListMethod { get; set; }
+        public List<MsElementAttribute> ListAttribute { get; set; }
         public string ClassParent { get; set; }
     }
 }

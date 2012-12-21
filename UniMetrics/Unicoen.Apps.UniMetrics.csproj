@@ -164,9 +164,9 @@
   <ItemGroup>
     <Compile Include="UcoAnalyzer\ComplexityMeasurement.cs" />
     <Compile Include="UcoAnalyzer\MeasurableElement.cs" />
-    <Compile Include="UcoAnalyzer\ElementClass.cs" />
-    <Compile Include="UcoAnalyzer\ElementMethod.cs" />
-    <Compile Include="UcoAnalyzer\ElementNamespace.cs" />
+    <Compile Include="UcoAnalyzer\MsElementClass.cs" />
+    <Compile Include="UcoAnalyzer\MsElementMethod.cs" />
+    <Compile Include="UcoAnalyzer\MsElementNamespace.cs" />
     <Compile Include="UcoAnalyzer\SizeMeasurement.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

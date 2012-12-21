@@ -39,8 +39,10 @@ namespace Unicoen.Apps.Loc.UcoAnalyzer
                     new XElement("number_of_operator", comp.NumberOfOperator),
                     new XElement("number_of_operand", comp.NumberOfOperand)),
                 new XElement("measurable_element",
-                    new XElement("namespace", new XAttribute("name", meas.ElementNamespace.Name),
-                        from a in meas.ListElementClass
+                    from f in meas.ListElementNamespace
+                    select 
+                        new XElement("namespace", new XAttribute("name", f.Name), new XAttribute("type", f.Type),
+                        from a in f.ListClass
                             select
                                 new XElement("class",
                                 new XElement("class_name", a.Name),

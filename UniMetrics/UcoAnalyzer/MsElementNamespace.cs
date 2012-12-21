@@ -5,10 +5,16 @@ using System.Text;
 
 namespace Unicoen.Apps.Loc.UcoAnalyzer
 {
-    class ElementNamespace
+    class MsElementNamespace
     {
         public string Name { get; set; }
         public string Type { get; set; } //namespace,package
-        public List<ElementClass> ListClass { get; set; }
+        public List<MsElementClass> ListClass { get; set; }
+
+        public MsElementNamespace()
+        {
+            this.Name = "";
+            this.Type = "";
+        }
     }
 }
