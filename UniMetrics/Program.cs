@@ -19,11 +19,10 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
-using Unicoen.Apps.Loc.UcoAnalyzer;
 using Unicoen.Apps.Loc.Util;
+using Unicoen.Apps.UniMetrics.UcoAnalyzer;
 
-namespace Unicoen.Apps.Loc {
+namespace Unicoen.Apps.UniMetrics {
 	internal class Program {
 		private static void Main(string[] args) {
 			// BASIC MEASUREMENT

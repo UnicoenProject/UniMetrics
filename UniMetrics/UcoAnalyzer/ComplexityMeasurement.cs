@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Unicoen.Languages.C.ProgramGenerators;
 using Unicoen.Languages.CSharp.ProgramGenerators;
 using Unicoen.Languages.Java.ProgramGenerators;
@@ -11,7 +9,7 @@ using Unicoen.Languages.Python2.ProgramGenerators;
 using Unicoen.Languages.Ruby18.Model;
 using Unicoen.Model;
 
-namespace Unicoen.Apps.Loc.UcoAnalyzer
+namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
 {
     class ComplexityMeasurement
     {

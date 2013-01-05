@@ -1,27 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Xml.Linq;
-using Unicoen.Languages.C.ProgramGenerators;
-using Unicoen.Languages.CSharp.ProgramGenerators;
-using Unicoen.Languages.Java.ProgramGenerators;
-using Unicoen.Languages.JavaScript.ProgramGenerators;
-using Unicoen.Languages.Python2.ProgramGenerators;
-using Unicoen.Languages.Ruby18.Model;
+using System.Collections.Generic;
+using Unicoen.Apps.UniMetrics.Strategy;
 using Unicoen.Model;
 
-namespace Unicoen.Apps.Loc.UcoAnalyzer
+namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
 {
 	class MeasurableElement
 	{
 		public string FilePath { get; set; }
+		public AbstractLanguageStrategy Strategy;
 		public List<MsElementNamespace> ListElementNamespace { get; set; }
 
 		public MeasurableElement(string filePath)
 		{
-			this.FilePath = filePath;
+			FilePath = filePath;
 		}
 
 		/// <summary>
@@ -29,135 +23,127 @@ namespace Unicoen.Apps.Loc.UcoAnalyzer
 		/// </summary>
 		public void SetMeasurableElement()
 		{
-			var codeObject = CreateCodeObject(this.FilePath);
-            this.ListElementNamespace = GetNamespaceListFromFile(codeObject);
-		}
-
-	    /// <summary>
-		/// generate unified code object from input source code
-		/// </summary>
-		public UnifiedProgram CreateCodeObject(string filePath)
-		{
-			UnifiedProgram codeObject = null;
-			var ext = Path.GetExtension(filePath);
+			var ext = Path.GetExtension(FilePath);
 			switch (ext.ToLower())
 			{
 				case ".c":
-					codeObject = new CProgramGenerator().GenerateFromFile(filePath);
+					Strategy = new CStrategy(FilePath);
 					break;
 				case ".cs":
-					codeObject = new CSharpProgramGenerator().GenerateFromFile(filePath);
+					Strategy = new CSharpStrategy(FilePath);
 					break;
 				case ".java":
-					codeObject = new JavaProgramGenerator().GenerateFromFile(filePath);
+					Strategy = new JavaStrategy(FilePath);
 					break;
 				case ".js":
-					codeObject = new JavaScriptProgramGenerator().GenerateFromFile(filePath);
+					Strategy = new JavaScriptStrategy(FilePath);
 					break;
 				case ".py":
-					codeObject = new Python2ProgramGenerator().GenerateFromFile(filePath);
+					Strategy = new PythonStrategy(FilePath);
 					break;
 				case ".rb":
-					codeObject = new Ruby18ProgramGenerator().GenerateFromFile(filePath);
+					Strategy = new RubyStrategy(FilePath);
 					break;
 				default:
 					Console.WriteLine("Incorrect input file");
 					break;
 			}
-			File.WriteAllText(@"_uco\" + Path.GetFileName(filePath) + DateTime.Now.ToFileTime() + ".txt", codeObject.ToString());
-			return codeObject;
+			File.WriteAllText(@"_uco\" + Path.GetFileName(FilePath) + DateTime.Now.ToFileTime() + ".txt", Strategy.CreateCodeObject().ToString());
+			ListElementNamespace = GetNamespaceListFromFile(Strategy.CreateCodeObject());
 		}
 
-        /// <summary>
-        /// get name of namespace/package
-        /// </summary>
-        private string GetNamespaceName(UnifiedNamespaceDefinition aNamespace)
-        {
-            var str = "";
-            if (aNamespace.FirstDescendant<UnifiedVariableIdentifier>().Parent is UnifiedNamespaceDefinition)
-            {
-                str = aNamespace.FirstDescendant<UnifiedVariableIdentifier>().Name;
-            }
-            else
-            {
-                var ns = aNamespace.FirstDescendant<UnifiedProperty>().Descendants<UnifiedVariableIdentifier>().Count();
-                var del = aNamespace.FirstDescendant<UnifiedProperty>().Delimiter;
-                for (var i = 0; i < ns; i++)
-                {
-                    str += aNamespace.Descendants<UnifiedVariableIdentifier>().ElementAt(i).Name + del;
-                }
-            }
-            return str.TrimEnd('.');
-        }
+		/// <summary>
+		/// get name of namespace/package
+		/// </summary>
+		private string GetNamespaceName(UnifiedNamespaceDefinition aNamespace)
+		{
+			var str = "";
+			var del = "";
+			if (aNamespace.FirstDescendant<UnifiedVariableIdentifier>().Parent is UnifiedNamespaceDefinition)
+			{
+				str = aNamespace.FirstDescendant<UnifiedVariableIdentifier>().Name;
+			}
+			else
+			{
+				var ns = aNamespace.FirstDescendant<UnifiedProperty>().Descendants<UnifiedVariableIdentifier>().Count();
+				del = aNamespace.FirstDescendant<UnifiedProperty>().Delimiter;
+				for (var i = 0; i < ns; i++)
+				{
+					str += aNamespace.Descendants<UnifiedVariableIdentifier>().ElementAt(i).Name + del;
+				}
+			}
+			return str.Remove(str.Length-del.Length, del.Length);
+		}
 
-        /// <summary>
-        /// get list of namespace/package in a file
-        /// Java does not allow multiple packages in the same source file 
-        /// C# does allow multiple namespaces in a single .cs file
-        /// </summary>
-        private List<MsElementNamespace> GetNamespaceListFromFile(UnifiedElement codeObject)
-        {
-            // One file has one or several namespace/package(s)
-            var listNamespace = new List<MsElementNamespace>();
-            var _namespace = codeObject.Descendants<UnifiedNamespaceDefinition>();
-            if (!_namespace.Any())
-            {
-                var elementNamespace = new MsElementNamespace();
-                elementNamespace.ListClass = GetClassListFromNamespace(codeObject);
-                listNamespace.Add(elementNamespace);
-            }
-            foreach (var aNamespace in _namespace)
-            {
-                var elementNamespace = new MsElementNamespace();
-                elementNamespace.Name = GetNamespaceName(aNamespace);
-                elementNamespace.Type = "package"; // namespace or package
-                elementNamespace.ListClass = GetClassListFromNamespace(aNamespace);
-                listNamespace.Add(elementNamespace);
-            }
-            return listNamespace;
-        }
+		/// <summary>
+		/// get list of namespace/package in a file
+		/// Java does not allow multiple packages in the same source file 
+		/// C# does allow multiple namespaces in a single .cs file
+		/// </summary>
+		private List<MsElementNamespace> GetNamespaceListFromFile(UnifiedElement codeObject)
+		{
+			// One file has one or several namespace/package(s)
+			var listNamespace = new List<MsElementNamespace>();
+			var namespaces = codeObject.Descendants<UnifiedNamespaceDefinition>();
+			if (!namespaces.Any())
+			{
+				var elementNamespace = new MsElementNamespace();
+				elementNamespace.ListClass = GetClassListFromNamespace(codeObject);
+				listNamespace.Add(elementNamespace);
+			}
+			foreach (var aNamespace in namespaces)
+			{
+				var elementNamespace = 
+					new MsElementNamespace
+						{
+							Name = GetNamespaceName(aNamespace),
+							// namespace or package
+							Type = Strategy.GetNamespaceType(),
+							ListClass = GetClassListFromNamespace(aNamespace)
+						};
 
-        /// <summary>
-        /// get list of class/interface in a namespace/package
-        /// </summary>
-        private List<MsElementClass> GetClassListFromNamespace(UnifiedElement aNamespace)
-        {
-            // One namespace has several classes
-            var listClass = new List<MsElementClass>();
-            var _classes = aNamespace.Descendants<UnifiedClassDefinition, UnifiedInterfaceDefinition>();
-            if (!_classes.Any())
-            {
-                var elementClass = new MsElementClass();
-                elementClass.ListMethod = GetMethodListFromClass(aNamespace);
-                elementClass.ListAttribute = GetAttributeListFromClass(aNamespace);
-                listClass.Add(elementClass);
-            }
-            foreach (var aClass in _classes)
-            {
-                var elementClass = new MsElementClass();
-                elementClass.Name = GetIdentifierName(aClass);
+				listNamespace.Add(elementNamespace);
+			}
+			return listNamespace;
+		}
 
-                if (aClass is UnifiedInterfaceDefinition)
-                {
-                    elementClass.Type = "interface";
-                }
-                else
-                {
-                    elementClass.Type = "class"; // class or abstract or interface
-                }
-                try
-                {
-                    elementClass.ClassParent = GetIdentifierName(aClass.Descendants<UnifiedExtendConstrain>().ElementAt(0));
-                }
-                catch (ArgumentOutOfRangeException e)
-                {
-                }
-                elementClass.ListMethod = GetMethodListFromClass(aClass);
-                elementClass.ListAttribute = GetAttributeListFromClass(aClass);
-                listClass.Add(elementClass);
-            }
-            return listClass;
-        }
+		/// <summary>
+		/// get list of class/interface in a namespace/package
+		/// </summary>
+		private List<MsElementClass> GetClassListFromNamespace(UnifiedElement aNamespace)
+		{
+			// One namespace has several classes
+			var listClass = new List<MsElementClass>();
+			var classes = aNamespace.Descendants<UnifiedClassDefinition, UnifiedInterfaceDefinition>();
+			if (!classes.Any())
+			{
+				var elementClass = new MsElementClass();
+				elementClass.ListMethod = GetMethodListFromClass(aNamespace);
+				elementClass.ListAttribute = GetAttributeListFromClass(aNamespace);
+				listClass.Add(elementClass);
+			}
+			foreach (var aClass in classes)
+			{
+				var isAbstract = false;
+				var isInterface = aClass is UnifiedInterfaceDefinition;
+				for (var i = 0; i < aClass.FirstDescendant<UnifiedModifierCollection>().Count; i++)
+				{
+					isAbstract = aClass.Descendants<UnifiedModifier>().ElementAt(i).Name.Equals("abstract");
+				}
+				var elementClass = 
+					new MsElementClass
+						{
+							Name = GetIdentifierName(aClass),
+							// class or interface or abstract or module
+							Type = Strategy.GetClassType(isAbstract, isInterface), 
+							ClassParent = GetIdentifierName(aClass.FirstDescendant<UnifiedExtendConstrain>()),
+							ListMethod = GetMethodListFromClass(aClass),
+							ListAttribute = GetAttributeListFromClass(aClass)
+						};
+				listClass.Add(elementClass);
+			}
+			return listClass;
+		}
 
 		/// <summary>
 		/// get list of method/function/procedure in a class
@@ -166,23 +152,23 @@ namespace Unicoen.Apps.Loc.UcoAnalyzer
 		{
 			// One class can have several methods
 			var listMethod = new List<MsElementMethod>();
-			var _methods = aClass.Descendants<UnifiedConstructor, UnifiedFunctionDefinition>();
-			foreach (var aMethod in _methods)
+			var methods = aClass.Descendants<UnifiedConstructor, UnifiedFunctionDefinition>();
+			foreach (var aMethod in methods)
 			{
-				var elementMethod = new MsElementMethod();
-				if (aMethod is UnifiedConstructor)
-				{
-                    elementMethod.Name = GetIdentifierName(aMethod.GrandParent());
-					elementMethod.Type = "constructor";
-				}
-				else
-				{
-					elementMethod.Name = ((UnifiedFunctionDefinition) aMethod).Name.Name;
-					elementMethod.Type = "method"; // method or function or procedure
-				}
-
-				elementMethod.ListMethofArgument = GetArgumentListFromMethod(aMethod);
-				elementMethod.ListMethodCall = GetMethodCallListFromMethod(aMethod);
+				var returnValue = GetIdentifierName(aMethod.FirstDescendant<UnifiedReturn>());
+				var isReturn = (returnValue != null);
+				var isConstructor = aMethod is UnifiedConstructor;
+				var elementMethod = 
+					new MsElementMethod
+						{
+							Name = isConstructor
+								   ? GetIdentifierName(aMethod.GrandParent())
+								   : ((UnifiedFunctionDefinition) aMethod).Name.Name,
+							// constructor or method or function or procedure
+							Type = Strategy.GetMethodType(isConstructor, isReturn),
+							ListMethofArgument = GetArgumentListFromMethod(aMethod),
+							ListMethodCall = GetMethodCallListFromMethod(aMethod)
+						};
 				listMethod.Add(elementMethod);
 			}
 			return listMethod;
@@ -195,16 +181,15 @@ namespace Unicoen.Apps.Loc.UcoAnalyzer
 		{
 			// One method can have several method arguments
 			var listMethodArgument = new List<MsElementMethodArgument>();
-			var _methodArgs = aMethod.Descendants<UnifiedParameter>();
-			foreach (var anArg in _methodArgs)
+			var methodArgs = aMethod.Descendants<UnifiedParameter>();
+			foreach (var anArg in methodArgs)
 			{
-				var elementMethodArgument = new MsElementMethodArgument();
-				try
-				{
-					elementMethodArgument.ArgName = GetIdentifierName(anArg.Names);
-					elementMethodArgument.ArgType = GetIdentifierName(anArg.Type);
-				} catch (NullReferenceException e) { }
-				
+				var elementMethodArgument = 
+					new MsElementMethodArgument
+						{
+							ArgName = GetIdentifierName(anArg.Names),
+							ArgType = GetIdentifierName(anArg.Type)
+						};
 				listMethodArgument.Add(elementMethodArgument);
 			}
 			return listMethodArgument;
@@ -217,8 +202,8 @@ namespace Unicoen.Apps.Loc.UcoAnalyzer
 		{
 			// One method can call other methods
 			var listMethodCall = new List<string>();
-			var _methodCall = aMethod.Descendants<UnifiedCall>();
-			foreach (var aCall in _methodCall)
+			var methodCall = aMethod.Descendants<UnifiedCall>();
+			foreach (var aCall in methodCall)
 			{
 				if (aCall.Descendants().ElementAt(0) is UnifiedVariableIdentifier)
 				{
@@ -235,20 +220,17 @@ namespace Unicoen.Apps.Loc.UcoAnalyzer
 		{
 			// One class can have several attributes
 			var listAttribute = new List<MsElementAttribute>();
-			var attr = aclass.Descendants<UnifiedVariableDefinition>();
-			foreach (var a in attr)
+			var attributes = aclass.Descendants<UnifiedVariableDefinition>();
+			foreach (var anAttr in attributes)
 			{
-				try
-				{
-					if (a.GrandGrandParent() is UnifiedClassDefinition)
-					{
-						var m = new MsElementAttribute();
-						m.Name = a.Name.Name;
-						m.Type = GetIdentifierName(a.Type);
-						listAttribute.Add(m);
-					}
-				}
-				catch (NullReferenceException e) { }
+				if (!(anAttr.GrandGrandParent() is UnifiedClassDefinition)) continue;
+				var elementAttribute = 
+					new MsElementAttribute
+						{
+							Name = anAttr.Name.Name, 
+							Type = GetIdentifierName(anAttr.Type)
+						};
+				listAttribute.Add(elementAttribute);
 			}
 			return listAttribute;
 		}
@@ -256,7 +238,14 @@ namespace Unicoen.Apps.Loc.UcoAnalyzer
 		private string GetIdentifierName (UnifiedElement ue)
 		{
 			// Get string name of a unified element
-			return ue.Descendants<UnifiedVariableIdentifier>().ElementAt(0).Name;
+			try 
+			{
+				return ue.Descendants<UnifiedVariableIdentifier>().ElementAt(0).Name;
+			}
+			catch (Exception e)
+			{
+				return null;
+			}
 		}
 	}
 }

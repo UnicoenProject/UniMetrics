@@ -8,8 +8,8 @@
     <ProjectGuid>{A1839E51-87A4-40BA-9000-172A6485ADC3}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Unicoen.Apps.Loc</RootNamespace>
-    <AssemblyName>Unicoen.Apps.Loc</AssemblyName>
+    <RootNamespace>Unicoen.Apps.UniMetrics</RootNamespace>
+    <AssemblyName>Unicoen.Apps.UniMetrics</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -162,6 +162,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Strategy\RubyStrategy.cs" />
+    <Compile Include="Strategy\PythonStrategy.cs" />
+    <Compile Include="Strategy\CSharpStrategy.cs" />
+    <Compile Include="Strategy\CStrategy.cs" />
+    <Compile Include="Strategy\JavaScriptStrategy.cs" />
+    <Compile Include="Strategy\AbstractLanguageStrategy.cs" />
+    <Compile Include="Strategy\JavaStrategy.cs" />
     <Compile Include="UcoAnalyzer\ComplexityMeasurement.cs" />
     <Compile Include="UcoAnalyzer\MeasurableElement.cs" />
     <Compile Include="UcoAnalyzer\MsElementClass.cs" />
