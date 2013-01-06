@@ -2,7 +2,7 @@
 
 namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
 {
-    class MsElementNamespace
+    public class MsElementNamespace
     {
         public string Name { get; set; }
         public string Type { get; set; } //namespace,package

@@ -20,7 +20,9 @@ using System;
 using System.IO;
 using System.Linq;
 using Unicoen.Apps.Loc.Util;
+using Unicoen.Apps.UniMetrics.OldUtil;
 using Unicoen.Apps.UniMetrics.UcoAnalyzer;
+using Unicoen.Apps.UniMetrics.XmlGenerator;
 
 namespace Unicoen.Apps.UniMetrics {
 	internal class Program {
@@ -34,15 +36,15 @@ namespace Unicoen.Apps.UniMetrics {
 				Console.WriteLine("Language : " + args[0]);
 				Console.WriteLine("Input    : " + inputPath + "\n");
 
-				var size = new SizeMeasurement(inputPath);
-				size.SetSizeMeasurement();
+				var size = new DefaultMeasurement(inputPath);
+				size.SetDefaultMeasurement();
 				//size.PrintSizeMeasurement();
 
 				var comp = new ComplexityMeasurement(inputPath);
 				comp.SetComplexityMeasurement();
 				//comp.PrintComplexityMeasurement();
 
-				var meas = new MeasurableElement(inputPath);
+				var meas = new MeasurableElementGenerator(inputPath);
 				meas.SetMeasurableElement();
 
 				var xml = new MeasurementXmlGenerator();

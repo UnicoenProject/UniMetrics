@@ -2,60 +2,39 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using Unicoen.Apps.UniMetrics.Strategy;
 using Unicoen.Model;
 
 namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
 {
-	class MeasurableElement
+	public abstract class MeasurableElementGenerator
 	{
-		public string FilePath { get; set; }
-		public AbstractLanguageStrategy Strategy;
 		public List<MsElementNamespace> ListElementNamespace { get; set; }
-
-		public MeasurableElement(string filePath)
+		
+		/// <summary>
+		/// set the measurement value into the object
+		/// the "Template Method" 
+		/// </summary>
+		public void SetMeasurableElement(string filePath)
 		{
-			FilePath = filePath;
+			var codeObject = Utils.CodeAnalyzer.CreateCodeObject(filePath);
+			ListElementNamespace = GetNamespaceListFromFile(codeObject);
+			File.WriteAllText(@"_uco\" + Path.GetFileName(filePath) + DateTime.Now.ToFileTime() + ".txt", codeObject.ToString());
+			
 		}
 
 		/// <summary>
-		/// set the measurement value into the object
+		/// the "Primitive Operations"
 		/// </summary>
-		public void SetMeasurableElement()
-		{
-			var ext = Path.GetExtension(FilePath);
-			switch (ext.ToLower())
-			{
-				case ".c":
-					Strategy = new CStrategy(FilePath);
-					break;
-				case ".cs":
-					Strategy = new CSharpStrategy(FilePath);
-					break;
-				case ".java":
-					Strategy = new JavaStrategy(FilePath);
-					break;
-				case ".js":
-					Strategy = new JavaScriptStrategy(FilePath);
-					break;
-				case ".py":
-					Strategy = new PythonStrategy(FilePath);
-					break;
-				case ".rb":
-					Strategy = new RubyStrategy(FilePath);
-					break;
-				default:
-					Console.WriteLine("Incorrect input file");
-					break;
-			}
-			File.WriteAllText(@"_uco\" + Path.GetFileName(FilePath) + DateTime.Now.ToFileTime() + ".txt", Strategy.CreateCodeObject().ToString());
-			ListElementNamespace = GetNamespaceListFromFile(Strategy.CreateCodeObject());
-		}
+		public abstract string GetNamespaceType();
+		public abstract string GetClassType(bool isAbstract, bool isInterface);
+		public abstract string GetMethodType(bool isConstructor, bool isReturn);
 
+		#region Measurable Element Generator
+		
 		/// <summary>
 		/// get name of namespace/package
 		/// </summary>
-		private string GetNamespaceName(UnifiedNamespaceDefinition aNamespace)
+		private string GetNamespaceName(UnifiedElement aNamespace)
 		{
 			var str = "";
 			var del = "";
@@ -98,7 +77,7 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
 						{
 							Name = GetNamespaceName(aNamespace),
 							// namespace or package
-							Type = Strategy.GetNamespaceType(),
+							Type = GetNamespaceType(),
 							ListClass = GetClassListFromNamespace(aNamespace)
 						};
 
@@ -135,7 +114,7 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
 						{
 							Name = GetIdentifierName(aClass),
 							// class or interface or abstract or module
-							Type = Strategy.GetClassType(isAbstract, isInterface), 
+							Type = GetClassType(isAbstract, isInterface), 
 							ClassParent = GetIdentifierName(aClass.FirstDescendant<UnifiedExtendConstrain>()),
 							ListMethod = GetMethodListFromClass(aClass),
 							ListAttribute = GetAttributeListFromClass(aClass)
@@ -165,7 +144,7 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
 								   ? GetIdentifierName(aMethod.GrandParent())
 								   : ((UnifiedFunctionDefinition) aMethod).Name.Name,
 							// constructor or method or function or procedure
-							Type = Strategy.GetMethodType(isConstructor, isReturn),
+							Type = GetMethodType(isConstructor, isReturn),
 							ListMethofArgument = GetArgumentListFromMethod(aMethod),
 							ListMethodCall = GetMethodCallListFromMethod(aMethod)
 						};
@@ -235,9 +214,11 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
 			return listAttribute;
 		}
 
+		/// <summary>
+		/// get string name of a unified element
+		/// </summary>
 		private string GetIdentifierName (UnifiedElement ue)
 		{
-			// Get string name of a unified element
 			try 
 			{
 				return ue.Descendants<UnifiedVariableIdentifier>().ElementAt(0).Name;
@@ -247,5 +228,7 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
 				return null;
 			}
 		}
+
+		#endregion
 	}
 }

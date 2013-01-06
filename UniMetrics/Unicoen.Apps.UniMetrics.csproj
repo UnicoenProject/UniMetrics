@@ -162,6 +162,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OldUtil\ComplexityMeasurement.cs" />
     <Compile Include="Strategy\RubyStrategy.cs" />
     <Compile Include="Strategy\PythonStrategy.cs" />
     <Compile Include="Strategy\CSharpStrategy.cs" />
@@ -169,23 +170,23 @@
     <Compile Include="Strategy\JavaScriptStrategy.cs" />
     <Compile Include="Strategy\AbstractLanguageStrategy.cs" />
     <Compile Include="Strategy\JavaStrategy.cs" />
-    <Compile Include="UcoAnalyzer\ComplexityMeasurement.cs" />
-    <Compile Include="UcoAnalyzer\MeasurableElement.cs" />
+    <Compile Include="UcoAnalyzer\MeasurableElementGenerator.cs" />
     <Compile Include="UcoAnalyzer\MsElementClass.cs" />
     <Compile Include="UcoAnalyzer\MsElementMethod.cs" />
     <Compile Include="UcoAnalyzer\MsElementNamespace.cs" />
-    <Compile Include="UcoAnalyzer\SizeMeasurement.cs" />
+    <Compile Include="UcoAnalyzer\DefaultMeasurement.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UcoAnalyzer\MeasurementXmlGenerator.cs" />
-    <Compile Include="Util\BlankLoc.cs" />
-    <Compile Include="Util\CommentLoc.cs" />
-    <Compile Include="Util\CyclomaticComplexity.cs" />
-    <Compile Include="Util\DiffCounter.cs" />
-    <Compile Include="Util\DifferentialLoc.cs" />
-    <Compile Include="Util\StatementLoc.cs" />
-    <Compile Include="Util\TotalLoc.cs" />
-    <Compile Include="Util\WeightedMethod.cs" />
+    <Compile Include="OldUtil\BlankLoc.cs" />
+    <Compile Include="OldUtil\CommentLoc.cs" />
+    <Compile Include="OldUtil\CyclomaticComplexity.cs" />
+    <Compile Include="OldUtil\DiffCounter.cs" />
+    <Compile Include="OldUtil\DifferentialLoc.cs" />
+    <Compile Include="OldUtil\StatementLoc.cs" />
+    <Compile Include="OldUtil\TotalLoc.cs" />
+    <Compile Include="OldUtil\WeightedMethod.cs" />
+    <Compile Include="Utils\CodeAnalyzer.cs" />
+    <Compile Include="XmlGenerator\MeasurementXmlGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -2,7 +2,7 @@
 
 namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
 {
-    class MsElementMethod
+    public class MsElementMethod
     {
         public string Name { get; set; }
         public string Type { get; set; }
@@ -10,13 +10,13 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
         public List<string> ListMethodCall { get; set; } 
     }
 
-    class MsElementMethodArgument
+    public class MsElementMethodArgument
     {
         public string ArgName { get; set; }
         public string ArgType { get; set; }
     }
 
-    class MsElementAttribute
+    public class MsElementAttribute
     {
         public string Name { get; set; }
         public string Type { get; set; }

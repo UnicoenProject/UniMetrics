@@ -1,13 +1,12 @@
-﻿using System;
-using Unicoen.Model;
+using System;
 
-namespace Unicoen.Apps.UniMetrics.Strategy
+namespace Unicoen.Apps.UniMetrics.OldUtil
 {
-    public abstract class AbstractLanguageStrategy
+    public class AbstractLanguageStrategy
     {
         public string FilePath;
 
-        public abstract string GetLanguage();
+        /*public abstract string GetLanguage();
 
         public abstract UnifiedProgram CreateCodeObject();
 
@@ -15,7 +14,7 @@ namespace Unicoen.Apps.UniMetrics.Strategy
 
         public abstract string GetClassType(bool isAbstract, bool isInterface);
 
-        public abstract string GetMethodType(bool isConstructor, bool isReturn);
+        public abstract string GetMethodType(bool isConstructor, bool isReturn);*/
 
         public virtual void Print()
         {

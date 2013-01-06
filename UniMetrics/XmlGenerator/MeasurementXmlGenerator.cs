@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Xml.Linq;
+using Unicoen.Apps.UniMetrics.UcoAnalyzer;
 
-namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
+namespace Unicoen.Apps.UniMetrics.XmlGenerator
 {
     class MeasurementXmlGenerator
     {
@@ -13,32 +14,31 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
 
         public void GenerateXmlElement(string filePath)
         {
-            var size = new SizeMeasurement(filePath);
-            size.SetSizeMeasurement();
-            var comp = new ComplexityMeasurement(filePath);
-            comp.SetComplexityMeasurement();
-            var meas = new MeasurableElement(filePath);
+            var def = new DefaultMeasurement();
+            def.SetDefaultMeasurement(filePath);
+            
+            var meas = new MeasurableElementGenerator(filePath);
             meas.SetMeasurableElement();
 
             var xmltree = 
                 new XElement("unimetrics", 
-                    CreateFileInfo(size),
-                    CreateSizeMetrics(size),
-                    CreateComplexityMetrics(comp),
+                    CreateFileInfo(def),
+                    CreateSizeMetrics(def),
+                    CreateComplexityMetrics(def),
                     new XElement("measurable_element",
                         meas.ListElementNamespace.Select(CreateXElementNamespace))
                );
             Console.WriteLine(xmltree);
         }
 
-        public XElement CreateFileInfo(SizeMeasurement size)
+        public XElement CreateFileInfo(DefaultMeasurement size)
         {
             return new XElement("file_info",
-                    new XElement("file_name", size.FilePath),
-                    new XElement("language", size.Language));
+                    new XElement("file_name", size.FilePath)/*,
+                    new XElement("language", size.Language)*/);
         }
 
-        public XElement CreateSizeMetrics(SizeMeasurement size)
+        public XElement CreateSizeMetrics(DefaultMeasurement size)
         {
             return new XElement("size_metrics",
                        new XElement("total_lines", size.TotalLoc),
@@ -48,7 +48,7 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
                        new XElement("number_of_statement", size.NumberOfStatement));
         }
 
-        public XElement CreateComplexityMetrics(ComplexityMeasurement comp)
+        public XElement CreateComplexityMetrics(DefaultMeasurement comp)
         {
             return new XElement("complexity_metrics",
                        new XElement("complexity_metrics", comp.CyclomaticComplexity),

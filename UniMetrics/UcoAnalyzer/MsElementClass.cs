@@ -2,7 +2,7 @@
 
 namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
 {
-    class MsElementClass 
+    public class MsElementClass 
     {
         public string Name { get; set; }
         public string Type { get; set; }
