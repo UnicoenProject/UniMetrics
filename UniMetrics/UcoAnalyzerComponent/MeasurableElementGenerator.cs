@@ -4,29 +4,45 @@ using System.Linq;
 using System.Collections.Generic;
 using Unicoen.Model;
 
-namespace Unicoen.Apps.UniMetrics.UcoAnalyzer
+namespace Unicoen.Apps.UniMetrics.UcoAnalyzerComponent
 {
 	public abstract class MeasurableElementGenerator
 	{
-		public List<MsElementNamespace> ListElementNamespace { get; set; }
+		protected internal List<MsElementNamespace> ListElementNamespace { get; set; }
 		
 		/// <summary>
 		/// set the measurement value into the object
 		/// the "Template Method" 
 		/// </summary>
-		public void SetMeasurableElement(string filePath)
+		public void SetMeasurableElement(string inFilePath)
 		{
-			var codeObject = Utils.CodeAnalyzer.CreateCodeObject(filePath);
-			ListElementNamespace = GetNamespaceListFromFile(codeObject);
-			File.WriteAllText(@"_uco\" + Path.GetFileName(filePath) + DateTime.Now.ToFileTime() + ".txt", codeObject.ToString());
-			
+			try
+			{
+				var codeObject = Utils.CodeAnalyzer.CreateCodeObject(inFilePath);
+				ListElementNamespace = GetNamespaceListFromFile(codeObject);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+			}
 		}
 
 		/// <summary>
+		/// get the namespace type: namespace or package
 		/// the "Primitive Operations"
 		/// </summary>
 		public abstract string GetNamespaceType();
+
+		/// <summary>
+		/// get the class type: // class or interface or abstract or module
+		/// the "Primitive Operations"
+		/// </summary>
 		public abstract string GetClassType(bool isAbstract, bool isInterface);
+
+		/// <summary>
+		/// get the method type: // constructor or method or function or procedure
+		/// the "Primitive Operations"
+		/// </summary>
 		public abstract string GetMethodType(bool isConstructor, bool isReturn);
 
 		#region Measurable Element Generator

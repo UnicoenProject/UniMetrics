@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Unicoen.Languages.C.ProgramGenerators;
 using Unicoen.Languages.CSharp.ProgramGenerators;
 using Unicoen.Languages.Java.ProgramGenerators;
@@ -12,11 +13,21 @@ namespace Unicoen.Apps.UniMetrics.Utils
 {
     public static class CodeAnalyzer
     {
+        public static bool IsValid (string filePath)
+        {
+            string[] extArray = { ".c", ".cs", ".java", ".js", ".py", ".rb" };
+            return extArray.Any(s => GetFileExtension(filePath).Contains(s));
+        }
+
+        public static string GetFileExtension (string filePath)
+        {
+            return Path.GetExtension(filePath).ToLower();
+        }
+
         public static UnifiedProgram CreateCodeObject(string filePath)
         {
             UnifiedProgram codeObject = null;
-            var ext = Path.GetExtension(filePath);
-            switch (ext.ToLower())
+            switch (GetFileExtension(filePath))
             {
                 case ".c":
                     codeObject = new CProgramGenerator().GenerateFromFile(filePath);

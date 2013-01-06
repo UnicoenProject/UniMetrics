@@ -1,8 +1,8 @@
-﻿using Unicoen.Apps.UniMetrics.UcoAnalyzer;
+﻿using Unicoen.Apps.UniMetrics.UcoAnalyzerComponent;
 
 namespace Unicoen.Apps.UniMetrics.FrameworkUser
 {
-    public class CStrategy : MeasurableElementGenerator
+    public class MeasurableElementForC : MeasurableElementGenerator
     {
         public override string GetNamespaceType()
         {

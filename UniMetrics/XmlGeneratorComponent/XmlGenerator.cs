@@ -1,44 +1,27 @@
-using System;
 using System.Linq;
 using System.Xml.Linq;
-using Unicoen.Apps.UniMetrics.UcoAnalyzer;
+using Unicoen.Apps.UniMetrics.UcoAnalyzerComponent;
+using Unicoen.Apps.UniMetrics.Utils;
 
-namespace Unicoen.Apps.UniMetrics.XmlGenerator
+namespace Unicoen.Apps.UniMetrics.XmlGeneratorComponent
 {
-    class MeasurementXmlGenerator
+    public abstract class XmlGenerator
     {
-        public MeasurementXmlGenerator()
-        {
-            
-        }
+        //public MeasurableElementGenerator Switch;
 
-        public void GenerateXmlElement(string filePath)
-        {
-            var def = new DefaultMeasurement();
-            def.SetDefaultMeasurement(filePath);
-            
-            var meas = new MeasurableElementGenerator(filePath);
-            meas.SetMeasurableElement();
+        /// <summary>
+        /// create XML Element for file details
+        /// the "Primitive Operations"
+        /// </summary>
+        public abstract XElement CreateFileDetails(string inFilePath);
 
-            var xmltree = 
-                new XElement("unimetrics", 
-                    CreateFileInfo(def),
-                    CreateSizeMetrics(def),
-                    CreateComplexityMetrics(def),
-                    new XElement("measurable_element",
-                        meas.ListElementNamespace.Select(CreateXElementNamespace))
-               );
-            Console.WriteLine(xmltree);
-        }
+        /// <summary>
+        /// set which measurable element generator will be used
+        /// the "Primitive Operations"
+        /// </summary>
+        public abstract MeasurableElementGenerator GetMeasurableElementGenerator();
 
-        public XElement CreateFileInfo(DefaultMeasurement size)
-        {
-            return new XElement("file_info",
-                    new XElement("file_name", size.FilePath)/*,
-                    new XElement("language", size.Language)*/);
-        }
-
-        public XElement CreateSizeMetrics(DefaultMeasurement size)
+        protected XElement CreateSizeMetrics(DefaultMeasurement size)
         {
             return new XElement("size_metrics",
                        new XElement("total_lines", size.TotalLoc),
@@ -48,7 +31,7 @@ namespace Unicoen.Apps.UniMetrics.XmlGenerator
                        new XElement("number_of_statement", size.NumberOfStatement));
         }
 
-        public XElement CreateComplexityMetrics(DefaultMeasurement comp)
+        protected XElement CreateComplexityMetrics(DefaultMeasurement comp)
         {
             return new XElement("complexity_metrics",
                        new XElement("complexity_metrics", comp.CyclomaticComplexity),
@@ -56,6 +39,34 @@ namespace Unicoen.Apps.UniMetrics.XmlGenerator
                        new XElement("number_of_operand", comp.NumberOfOperand));
         }
 
+        /// <summary>
+        /// the "Template Method"
+        /// </summary>
+        public XDocument GenerateXmlDocument(string inFilePath/*, MeasurableElementGenerator measurableElementGenerator*/)
+        {
+            if (CodeAnalyzer.IsValid(inFilePath))
+            {
+                var defaultMeasurement = new DefaultMeasurement();
+                defaultMeasurement.SetDefaultMeasurement(inFilePath);
+                var measurableElementGenerator = GetMeasurableElementGenerator();
+                measurableElementGenerator.SetMeasurableElement(inFilePath);
+                var xdoc = new XDocument(
+                    new XDeclaration("1.0", "utf-8", null),
+                    new XElement("unimetrics",
+                                 CreateFileDetails(inFilePath),
+                                 CreateSizeMetrics(defaultMeasurement),
+                                 CreateComplexityMetrics(defaultMeasurement),
+                                 new XElement("measurable_element",
+                                              measurableElementGenerator.ListElementNamespace.Select(
+                                                  CreateXElementNamespace)))
+                    );
+                return xdoc;
+            }
+            return null;
+        }
+
+        #region Measurable Element XElement Generator
+        
         private static XElement CreateXElementNamespace(MsElementNamespace elNsp)
         {
             return new XElement("namespace",
@@ -100,6 +111,7 @@ namespace Unicoen.Apps.UniMetrics.XmlGenerator
                        new XElement("attribute_type", elAtr.Type),
                        new XElement("attribute_name", elAtr.Name));
         }
+        #endregion
     }
 }
 

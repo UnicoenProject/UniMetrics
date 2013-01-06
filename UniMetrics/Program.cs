@@ -20,9 +20,10 @@ using System;
 using System.IO;
 using System.Linq;
 using Unicoen.Apps.Loc.Util;
-using Unicoen.Apps.UniMetrics.OldUtil;
-using Unicoen.Apps.UniMetrics.UcoAnalyzer;
-using Unicoen.Apps.UniMetrics.XmlGenerator;
+using Unicoen.Apps.UniMetrics.FrameworkUser;
+using Unicoen.Apps.UniMetrics.UcoAnalyzerComponent;
+using Unicoen.Apps.UniMetrics.Utils;
+using Unicoen.Apps.UniMetrics.XmlGeneratorComponent;
 
 namespace Unicoen.Apps.UniMetrics {
 	internal class Program {
@@ -30,32 +31,48 @@ namespace Unicoen.Apps.UniMetrics {
 			// BASIC MEASUREMENT
 			// args[0] is the language
 			// arge[1] is the file name or directory name
-
 			if (args.Length == 2) {
 				var inputPath = FixtureUtil.GetInputPath(args[0], args[1]);
 				Console.WriteLine("Language : " + args[0]);
 				Console.WriteLine("Input    : " + inputPath + "\n");
 
-				var size = new DefaultMeasurement(inputPath);
-				size.SetDefaultMeasurement();
-				//size.PrintSizeMeasurement();
-
-				var comp = new ComplexityMeasurement(inputPath);
-				comp.SetComplexityMeasurement();
-				//comp.PrintComplexityMeasurement();
-
-				var meas = new MeasurableElementGenerator(inputPath);
-				meas.SetMeasurableElement();
-
-				var xml = new MeasurementXmlGenerator();
-				xml.GenerateXmlElement(inputPath);
+				MeasurableElementGenerator me = null;
+				XmlGenerator xml = null;
+				/*switch (CodeAnalyzer.GetFileExtension(inputPath))
+				{
+					case ".c":
+						// not yet implemented
+						break;
+					case ".cs":
+						// not yet implemented
+						break;
+					case ".java":
+						me = new MeasurableElementForJava();
+						xml = new XmlGeneratorForJava();
+						break;
+					case ".js":
+						me = new MeasurableElementForJavaScript();
+						xml = new XmlGeneratorForJavaScript();
+						break;
+					case ".py":
+						// not yet implemented
+						break;
+					case ".rb":
+						// not yet implemented
+						break;
+					default:
+						Console.WriteLine("Incorrect input file");
+						break;
+				}*/
+				xml = new XmlGeneratorForJava();
+				var a = new XmlFilesCreator("_uco");
+				a.SaveFiles(inputPath, xml);
 			}
 
 			// DIFFERENTIAL MEASUREMENT
 			// args[0] is the language
 			// arge[1] is the original source code file
 			// arge[2] is the modified source code file
-
 			if (args.Length == 3) {
 				var orign = FixtureUtil.GetInputPath(args[0], args[1]);
 				var modif = FixtureUtil.GetInputPath(args[0], args[2]);
@@ -76,7 +93,8 @@ namespace Unicoen.Apps.UniMetrics {
 		}
 	}
 
-	internal static class FixtureUtil
+	#region FixtureUtil
+	static class FixtureUtil
 	{
 		public static string RootPath = Path.Combine("..", "..");
 		public static string FixturePath = Path.Combine(RootPath, "fixture");
@@ -179,4 +197,5 @@ namespace Unicoen.Apps.UniMetrics {
 					.GetFullPathAddingSubNames(names);
 		}
 	}
+	#endregion
 }

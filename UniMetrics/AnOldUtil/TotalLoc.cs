@@ -66,14 +66,14 @@ namespace Unicoen.Apps.Loc.Util {
 				count++;
 			}*/
 
-            string line;
-            int count = 0;
-            var sr = new StreamReader(filePath);
-            while ((line = sr.ReadLine()) != null)
-            {
-                count++;
-            }
-            
+			string line;
+			int count = 0;
+			var sr = new StreamReader(filePath);
+			while ((line = sr.ReadLine()) != null)
+			{
+				count++;
+			}
+			
 
 			sr.Close();
 

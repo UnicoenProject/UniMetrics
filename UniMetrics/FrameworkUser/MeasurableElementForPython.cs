@@ -1,8 +1,8 @@
-﻿using Unicoen.Apps.UniMetrics.UcoAnalyzer;
+﻿using Unicoen.Apps.UniMetrics.UcoAnalyzerComponent;
 
 namespace Unicoen.Apps.UniMetrics.FrameworkUser
 {
-    public class PythonStrategy : MeasurableElementGenerator
+    public class MeasurableElementForPython : MeasurableElementGenerator
     {
         public override string GetNamespaceType()
         {

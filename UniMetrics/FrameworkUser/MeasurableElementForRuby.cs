@@ -1,8 +1,8 @@
-﻿using Unicoen.Apps.UniMetrics.UcoAnalyzer;
+﻿using Unicoen.Apps.UniMetrics.UcoAnalyzerComponent;
 
 namespace Unicoen.Apps.UniMetrics.FrameworkUser
 {
-    public class RubyStrategy : MeasurableElementGenerator
+    public class MeasurableElementForRuby : MeasurableElementGenerator
     {
         public override string GetNamespaceType()
         {
