@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2011-2012 The Unicoen Project
 // 
@@ -21,7 +21,7 @@ using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
 
-namespace Unicoen.Apps.Loc.Util {
+namespace Unicoen.Apps.UniMetrics.Utils {
 	public class DifferentialLoc {
 		/// <summary>
 		/// measure differential between two files

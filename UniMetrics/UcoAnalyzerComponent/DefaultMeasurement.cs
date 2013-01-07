@@ -35,7 +35,7 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzerComponent
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e);
+				Console.WriteLine("Can not measure some default metrics");
 			}
 		}
 

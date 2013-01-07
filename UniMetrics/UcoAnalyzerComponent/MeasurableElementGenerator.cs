@@ -1,7 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using Unicoen.Apps.UniMetrics.Utils;
 using Unicoen.Model;
 
 namespace Unicoen.Apps.UniMetrics.UcoAnalyzerComponent
@@ -18,12 +18,12 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzerComponent
 		{
 			try
 			{
-				var codeObject = Utils.CodeAnalyzer.CreateCodeObject(inFilePath);
+				var codeObject = CodeAnalyzer.CreateCodeObject(inFilePath);
 				ListElementNamespace = GetNamespaceListFromFile(codeObject);
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e);
+                Console.WriteLine("Can not set some measurable elements");
 			}
 		}
 
@@ -241,7 +241,7 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzerComponent
 			}
 			catch (Exception e)
 			{
-				return null;
+                return null;
 			}
 		}
 

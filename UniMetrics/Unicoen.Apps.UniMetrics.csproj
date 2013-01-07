@@ -162,8 +162,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnOldUtil\AbstractLanguageStrategy.cs" />
-    <Compile Include="AnOldUtil\ComplexityMeasurement.cs" />
+    <Compile Include="FrameworkUser\AllSelector.cs" />
     <Compile Include="FrameworkUser\XmlGeneratorForJavaScript.cs" />
     <Compile Include="FrameworkUser\MeasurableElementForRuby.cs" />
     <Compile Include="FrameworkUser\MeasurableElementForPython.cs" />
@@ -173,21 +172,16 @@
     <Compile Include="FrameworkUser\MeasurableElementForJava.cs" />
     <Compile Include="FrameworkUser\XmlGeneratorForJava.cs" />
     <Compile Include="UcoAnalyzerComponent\MeasurableElementGenerator.cs" />
-    <Compile Include="UcoAnalyzerComponent\MsElementClass.cs" />
-    <Compile Include="UcoAnalyzerComponent\MsElementMethod.cs" />
-    <Compile Include="UcoAnalyzerComponent\MsElementNamespace.cs" />
     <Compile Include="UcoAnalyzerComponent\DefaultMeasurement.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AnOldUtil\BlankLoc.cs" />
-    <Compile Include="AnOldUtil\CommentLoc.cs" />
-    <Compile Include="AnOldUtil\CyclomaticComplexity.cs" />
-    <Compile Include="AnOldUtil\DiffCounter.cs" />
-    <Compile Include="AnOldUtil\DifferentialLoc.cs" />
-    <Compile Include="AnOldUtil\StatementLoc.cs" />
-    <Compile Include="AnOldUtil\TotalLoc.cs" />
-    <Compile Include="AnOldUtil\WeightedMethod.cs" />
     <Compile Include="Utils\CodeAnalyzer.cs" />
+    <Compile Include="Utils\DiffCounter.cs" />
+    <Compile Include="Utils\DifferentialLoc.cs" />
+    <Compile Include="Utils\MsElementClass.cs" />
+    <Compile Include="Utils\MsElementMethod.cs" />
+    <Compile Include="Utils\MsElementNamespace.cs" />
+    <Compile Include="XmlGeneratorComponent\ISelector.cs" />
     <Compile Include="XmlGeneratorComponent\XmlFilesCreator.cs" />
     <Compile Include="XmlGeneratorComponent\XmlGenerator.cs" />
   </ItemGroup>

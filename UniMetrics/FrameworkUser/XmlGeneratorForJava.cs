@@ -13,7 +13,7 @@ namespace Unicoen.Apps.UniMetrics.FrameworkUser
                        new XElement("language", "Java"));
         }
 
-        public override MeasurableElementGenerator GetMeasurableElementGenerator()
+        public override MeasurableElementGenerator SelectMeasurableElementGenerator()
         {
             return new MeasurableElementForJava();
         }

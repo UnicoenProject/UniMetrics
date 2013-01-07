@@ -7,59 +7,67 @@ namespace Unicoen.Apps.UniMetrics.XmlGeneratorComponent
     public class XmlFilesCreator
     {
         public string OutputDirectoryPath;
-        public string InputDirectory;
+        public ISelector Selector;
+        private string _inputDirectory;
 
-        public XmlFilesCreator (string outdir)
+        public XmlFilesCreator (string outdir, ISelector selector)
         {
             OutputDirectoryPath = outdir;
+            this.Selector = selector;
         }
 
-        public void SaveFiles(string inputPath, /*MeasurableElementGenerator msGenerator,*/ XmlGenerator xmlGenerator)
+        public void SaveFiles(string inputPath)
         {
             var input = File.GetAttributes(@inputPath);
             // if inputPath is a directory
             if ((input & FileAttributes.Directory) == FileAttributes.Directory)
             {
                 var dirPath = new DirectoryInfo(@inputPath);
-                InputDirectory = inputPath;
-                SaveForDirectory(dirPath, /*msGenerator,*/ xmlGenerator);
+                _inputDirectory = inputPath;
+                SaveForDirectory(dirPath);
             }
             // if inputPath is a file
             else
             {
                 var filPath = new FileInfo(@inputPath);
-                InputDirectory = filPath.DirectoryName;
-                SaveForFile(filPath, /*msGenerator,*/ xmlGenerator);
+                _inputDirectory = filPath.DirectoryName;
+                //_ext = Utils.CodeAnalyzer.GetFileExtension(filPath.FullName);
+                SaveForFile(filPath);
             }
         }
 
-        private void SaveForDirectory(DirectoryInfo directory, /*MeasurableElementGenerator msGenerator,*/ XmlGenerator xmlGenerator)
+        private void SaveForDirectory(DirectoryInfo directory)
         {
             var files = directory.GetFiles("*.*");
             foreach (FileInfo file in files)
             {   
-                SaveForFile(file, /*msGenerator,*/ xmlGenerator);
+                SaveForFile(file);
             }
             var dirs = directory.GetDirectories("*.*");
             foreach (DirectoryInfo dir in dirs)
             {
-                SaveForDirectory(dir, /*msGenerator,*/ xmlGenerator);
+                SaveForDirectory(dir);
             }
         }
 
-        private void SaveForFile(FileInfo file, /*MeasurableElementGenerator msGenerator,*/ XmlGenerator xmlGenerator)
+        private void SaveForFile(FileInfo file)
         {
-            var xdoc = xmlGenerator.GenerateXmlDocument(file.FullName/*, msGenerator*/);
-            var xdir = file.Directory.ToString().Remove(0, InputDirectory.Length);
+            var xdir = file.Directory.ToString().Remove(0, _inputDirectory.Length);
             var xname = xdir.Length == 0 ? file.Name : xdir.Replace("\\", "#") + "#" + file.Name;
-            if (xdoc != null)
+
+            var xgen = Selector.SelectXmlGenerator(file.Extension.ToLower());
+            if (xgen == null)
             {
-                Console.WriteLine("Saving XML for " + xname);
-                xdoc.Save(@OutputDirectoryPath + "\\" + xname + ".xml");
+                Console.WriteLine("Can not create XML for " + xname.Replace("#","\\"));
             }
             else
             {
-                Console.WriteLine("Can not create XML for " + xname);
+                var xdoc = xgen.GenerateXmlDocument(file.FullName);
+                if (xdoc != null)
+                {
+                    Console.WriteLine("Saving XML for " + xname.TrimStart('#').Replace("#", "\\"));
+                    xdoc.Save(@OutputDirectoryPath + "\\" + xname + ".xml");
+                }
             }
         }
 

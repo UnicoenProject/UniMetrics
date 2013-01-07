@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace Unicoen.Apps.UniMetrics.UcoAnalyzerComponent
+namespace Unicoen.Apps.UniMetrics.Utils
 {
     public class MsElementNamespace
     {

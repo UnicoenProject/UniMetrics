@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright (C) 2011-2012 The Unicoen Project
 // 
@@ -16,7 +16,7 @@
 
 #endregion
 
-namespace Unicoen.Apps.Loc.Util {
+namespace Unicoen.Apps.UniMetrics.Utils {
 	// class containing number of differential elements
 	public class DiffCounter {
 		public DiffCounter(int na, int nd, int nm, int ne) {

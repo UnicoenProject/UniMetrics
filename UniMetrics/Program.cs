@@ -19,14 +19,13 @@
 using System;
 using System.IO;
 using System.Linq;
-using Unicoen.Apps.Loc.Util;
 using Unicoen.Apps.UniMetrics.FrameworkUser;
-using Unicoen.Apps.UniMetrics.UcoAnalyzerComponent;
 using Unicoen.Apps.UniMetrics.Utils;
 using Unicoen.Apps.UniMetrics.XmlGeneratorComponent;
 
 namespace Unicoen.Apps.UniMetrics {
 	internal class Program {
+
 		private static void Main(string[] args) {
 			// BASIC MEASUREMENT
 			// args[0] is the language
@@ -35,38 +34,8 @@ namespace Unicoen.Apps.UniMetrics {
 				var inputPath = FixtureUtil.GetInputPath(args[0], args[1]);
 				Console.WriteLine("Language : " + args[0]);
 				Console.WriteLine("Input    : " + inputPath + "\n");
-
-				MeasurableElementGenerator me = null;
-				XmlGenerator xml = null;
-				/*switch (CodeAnalyzer.GetFileExtension(inputPath))
-				{
-					case ".c":
-						// not yet implemented
-						break;
-					case ".cs":
-						// not yet implemented
-						break;
-					case ".java":
-						me = new MeasurableElementForJava();
-						xml = new XmlGeneratorForJava();
-						break;
-					case ".js":
-						me = new MeasurableElementForJavaScript();
-						xml = new XmlGeneratorForJavaScript();
-						break;
-					case ".py":
-						// not yet implemented
-						break;
-					case ".rb":
-						// not yet implemented
-						break;
-					default:
-						Console.WriteLine("Incorrect input file");
-						break;
-				}*/
-				xml = new XmlGeneratorForJava();
-				var a = new XmlFilesCreator("_uco");
-				a.SaveFiles(inputPath, xml);
+				var xmls = new XmlFilesCreator("_uco", new AllSelector());
+				xmls.SaveFiles(inputPath);
 			}
 
 			// DIFFERENTIAL MEASUREMENT

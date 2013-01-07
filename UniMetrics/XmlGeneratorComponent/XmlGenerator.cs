@@ -7,8 +7,6 @@ namespace Unicoen.Apps.UniMetrics.XmlGeneratorComponent
 {
     public abstract class XmlGenerator
     {
-        //public MeasurableElementGenerator Switch;
-
         /// <summary>
         /// create XML Element for file details
         /// the "Primitive Operations"
@@ -19,7 +17,7 @@ namespace Unicoen.Apps.UniMetrics.XmlGeneratorComponent
         /// set which measurable element generator will be used
         /// the "Primitive Operations"
         /// </summary>
-        public abstract MeasurableElementGenerator GetMeasurableElementGenerator();
+        public abstract MeasurableElementGenerator SelectMeasurableElementGenerator();
 
         protected XElement CreateSizeMetrics(DefaultMeasurement size)
         {
@@ -48,7 +46,7 @@ namespace Unicoen.Apps.UniMetrics.XmlGeneratorComponent
             {
                 var defaultMeasurement = new DefaultMeasurement();
                 defaultMeasurement.SetDefaultMeasurement(inFilePath);
-                var measurableElementGenerator = GetMeasurableElementGenerator();
+                var measurableElementGenerator = SelectMeasurableElementGenerator();
                 measurableElementGenerator.SetMeasurableElement(inFilePath);
                 var xdoc = new XDocument(
                     new XDeclaration("1.0", "utf-8", null),
