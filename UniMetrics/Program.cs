@@ -19,6 +19,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using Unicoen.Apps.UniMetrics.FrameworkUser;
 using Unicoen.Apps.UniMetrics.Utils;
 using Unicoen.Apps.UniMetrics.XmlGeneratorComponent;
@@ -35,7 +36,16 @@ namespace Unicoen.Apps.UniMetrics {
 				Console.WriteLine("Language : " + args[0]);
 				Console.WriteLine("Input    : " + inputPath + "\n");
 				var xmls = new XmlFilesCreator("_uco", new AllSelector());
-				xmls.SaveFiles(inputPath);
+				//xmls.SaveFiles(inputPath);
+                var xDoc = XDocument.Load("_uco\\TestPageResult.java.xml");
+				var myMeasurer = new MyCodeMeasurer();
+				Console.WriteLine();
+				Console.WriteLine("SIZE METRICS");
+				myMeasurer.PrintDictionary(myMeasurer.GetSizeMeasurement(xDoc));
+				Console.WriteLine("COMPLEXITY METRICS");
+				myMeasurer.PrintDictionary(myMeasurer.GetComplexityMeasurement(xDoc));
+                Console.WriteLine("MEASURABLE ELEMENT");
+                myMeasurer.PrintMetrics(xDoc);
 			}
 
 			// DIFFERENTIAL MEASUREMENT

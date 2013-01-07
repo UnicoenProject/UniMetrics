@@ -23,7 +23,7 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzerComponent
 			}
 			catch (Exception e)
 			{
-                Console.WriteLine("Can not set some measurable elements");
+				Console.WriteLine("Can not set some measurable elements");
 			}
 		}
 
@@ -241,7 +241,7 @@ namespace Unicoen.Apps.UniMetrics.UcoAnalyzerComponent
 			}
 			catch (Exception e)
 			{
-                return null;
+				return null;
 			}
 		}
 

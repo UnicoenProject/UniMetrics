@@ -19,7 +19,7 @@ namespace Unicoen.Apps.UniMetrics.XmlGeneratorComponent
         /// </summary>
         public abstract MeasurableElementGenerator SelectMeasurableElementGenerator();
 
-        protected XElement CreateSizeMetrics(DefaultMeasurement size)
+        protected XElement CreateSizeMetrics(DefaultMeasurementGenerator size)
         {
             return new XElement("size_metrics",
                        new XElement("total_lines", size.TotalLoc),
@@ -29,10 +29,10 @@ namespace Unicoen.Apps.UniMetrics.XmlGeneratorComponent
                        new XElement("number_of_statement", size.NumberOfStatement));
         }
 
-        protected XElement CreateComplexityMetrics(DefaultMeasurement comp)
+        protected XElement CreateComplexityMetrics(DefaultMeasurementGenerator comp)
         {
             return new XElement("complexity_metrics",
-                       new XElement("complexity_metrics", comp.CyclomaticComplexity),
+                       new XElement("cyclomatic_complexity", comp.CyclomaticComplexity),
                        new XElement("number_of_operator", comp.NumberOfOperator),
                        new XElement("number_of_operand", comp.NumberOfOperand));
         }
@@ -40,11 +40,11 @@ namespace Unicoen.Apps.UniMetrics.XmlGeneratorComponent
         /// <summary>
         /// the "Template Method"
         /// </summary>
-        public XDocument GenerateXmlDocument(string inFilePath/*, MeasurableElementGenerator measurableElementGenerator*/)
+        public XDocument GenerateXmlDocument(string inFilePath)
         {
             if (CodeAnalyzer.IsValid(inFilePath))
             {
-                var defaultMeasurement = new DefaultMeasurement();
+                var defaultMeasurement = new DefaultMeasurementGenerator();
                 defaultMeasurement.SetDefaultMeasurement(inFilePath);
                 var measurableElementGenerator = SelectMeasurableElementGenerator();
                 measurableElementGenerator.SetMeasurableElement(inFilePath);

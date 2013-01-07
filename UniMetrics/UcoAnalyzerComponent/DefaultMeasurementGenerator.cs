@@ -5,7 +5,7 @@ using Unicoen.Model;
 
 namespace Unicoen.Apps.UniMetrics.UcoAnalyzerComponent
 {
-	public class DefaultMeasurement
+	public class DefaultMeasurementGenerator
 	{
 		/// <summary>
 		/// Size measurement
